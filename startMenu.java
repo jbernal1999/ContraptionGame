@@ -6,6 +6,8 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos; 
 import javafx.scene.Scene; 
 import javafx.scene.control.*;
+import javafx.scene.paint.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.*; 
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -43,7 +45,8 @@ public class startMenu extends Application
       
       
       //padding insets to center
-      //insets = (top, left, bottom, right)
+      //insets = (top, right, bottom, left)
+      //this may have to change? WILL IT EFFECT OTHER SCENE PADDINGS?
       window.setPadding(new Insets(30, 250, 30, 250));
       
       //add title - create label
@@ -81,9 +84,48 @@ public class startMenu extends Application
       
       Scene startPage = new Scene(window, paneWidth, paneHeight);
       
-      //set action on start button
-      startButton.setOnAction(e -> mainWindow.setScene(level1));
       
+      //level 1 layout - create new pane
+      TilePane levelOne = new TilePane(Orientation.VERTICAL);
+      levelOne.setPrefSize(paneWidth, paneHeight);
+      levelOne.setPadding(new Insets(20,20,20,20));
+      
+      //borderpane
+      //BorderPane tileFloor = new Borderpane();
+   
+      
+      //declare tileboard
+      Rectangle[][] tiles;
+      int rows = 6;
+      int columns = 5;
+      tiles = new Rectangle[rows][columns];
+      //initalize tileboard
+      for(int i = 0; i < rows; i++)
+      {
+         for(int j = 0; j < columns; j++)
+         {
+            tiles[i][j] = new Rectangle();
+            tiles[i][j].setWidth(100);
+            tiles[i][j].setHeight(100);
+            tiles[i][j].setFill(Color.RED);
+            tiles[i][j].setStroke(Color.BLACK);
+            
+            levelOne.getChildren().add(0,tiles[i][j]);
+         }
+      }
+      
+      levelOne.setAlignment(Pos.CENTER);
+      
+      //create new rectangle for raised area
+      Rectangle shelf = new Rectangle(125,600);
+      shelf.setFill(Color.GREY);
+      //levelOne.getChildren().add(1,shelf);
+     
+      
+      level1 = new Scene(levelOne, paneWidth, paneHeight);
+      
+       //set action on start button -> (from scene to scene)
+      startButton.setOnAction(e -> mainWindow.setScene(level1));
       //show everything
       mainWindow.setScene(startPage);
       mainWindow.setTitle("START MENU");
