@@ -32,8 +32,9 @@ public class contrapLevelOne extends Application
    }
    
    private static final double W = 650, H = 650;
-   boolean goUp, goDown, goRight, goLeft, running;
+   boolean goUp, goDown, goRight, goLeft, inBounds;
    public Rectangle human;
+   public AnimationTimer timer;
    
    
    @Override
@@ -43,6 +44,8 @@ public class contrapLevelOne extends Application
       human.setArcHeight(10);
       human.setArcWidth(10);
       moveHeroTo(W / 2, H / 2);
+      //set inBounds to true since we are in the middle of pane
+      inBounds = true;
  
       //level 1 layout - create new pane
       TilePane levelOne = new TilePane();
@@ -77,38 +80,42 @@ public class contrapLevelOne extends Application
       
       Scene level1 = new Scene(levelUno, W, H, Color.FORESTGREEN);
       
-      level1.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
+      level1.setOnKeyPressed(new EventHandler<KeyEvent>() 
+      {
+            public void handle(KeyEvent event) 
+            {
+                switch (event.getCode()) 
+                {
                     case UP:    goUp = true;
                     System.out.println("UP pressed");
-                    System.out.println(human.getLayoutBounds());
+                    //System.out.println("X: " + human.getLocalToParentTransform().getTx() + "\tY: " + human.getLocalToParentTransform().getTy());
                     break;
+                    
                     case DOWN:  goDown = true;
                     System.out.println("DONW pressed");
-                    //this is on to something?
-                    //need to find coordinates of square to block of boundaries!
-                    System.out.println(human.getLocalToSceneTransform());
-                     break;
+                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    break;
+                    
                     case LEFT:  goLeft  = true; 
                     System.out.println("LEFT pressed");
-                    System.out.println(human.getScaleX()+"\t"+levelOne.getScaleY()+"\t"+levelOne.getScaleZ());
+                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
+                    
                     case RIGHT: goRight  = true;
                     System.out.println("RIGHT pressed");
-                    System.out.println(human.getBoundsInParent().getDepth());
-                     break;
-
+                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    break;
                     
                 }
             }
         });
 
-      level1.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
+      level1.setOnKeyReleased(new EventHandler<KeyEvent>() 
+      {
+            public void handle(KeyEvent event) 
+            {
+                switch (event.getCode()) 
+                {
                     case UP:    goUp = false;
                     System.out.println("UP released");
                      break;
@@ -131,24 +138,45 @@ public class contrapLevelOne extends Application
       stage.setTitle("LEVEL ONE");
       stage.show();
       
-      AnimationTimer timer = new AnimationTimer() {
+      timer = new AnimationTimer() 
+      {
             
-            public void handle(long now) {
+            public void handle(long now) 
+            {
                 int dx = 0, dy = 0;
 
                 if (goUp) dy -= 1;
                 if (goDown) dy += 1;
                 if (goLeft)  dx -= 1;
                 if (goRight)  dx += 1;
-                if (running) { dx *= 3; dy *= 3; }
 
                 moveHeroBy(dx, dy);
+                while((human.getLocalToParentTransform().getTx() < 26) || (human.getLocalToParentTransform().getTy() < 74) ||
+               (human.getLocalToParentTransform().getTx() > 617) || (human.getLocalToParentTransform().getTy() > 566))
+                {
+                  timer.stop();
+                  //inBounds = false;
+                  //too far left [x < 26]
+                  if((human.getLocalToParentTransform().getTy() < 74) ||
+                  (human.getLocalToParentTransform().getTx() > 617) || (human.getLocalToParentTransform().getTy() > 566))
+                  {
+                     timer.start();
+                  }
+                  
+                }
+               
             }
         };
         timer.start();
+        
+      //bounds on character
+      
+      
+       
    }
    
-   private void moveHeroBy(int dx, int dy) {
+   private void moveHeroBy(int dx, int dy) 
+   {
         if (dx == 0 && dy == 0) return;
 
         final double cx = human.getBoundsInLocal().getWidth()  / 2;
@@ -160,7 +188,8 @@ public class contrapLevelOne extends Application
 
         moveHeroTo(x, y);
     }
-    private void moveHeroTo(double x, double y) {
+    private void moveHeroTo(double x, double y) 
+    {
         final double cx = human.getBoundsInLocal().getWidth()  / 2;
         final double cy = human.getBoundsInLocal().getHeight() / 2;
 
