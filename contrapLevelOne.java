@@ -67,7 +67,6 @@ public class contrapLevelOne extends Application
             tiles[i][j].setHeight(100);
             tiles[i][j].setFill(Color.RED);
             tiles[i][j].setStroke(Color.BLACK);
-            //tiles[i][j].setAlignment(Pos.CENTER);
             levelOne.getChildren().add(tiles[i][j]);
          }
       }
@@ -77,6 +76,7 @@ public class contrapLevelOne extends Application
       Group levelUno = new Group();
       levelUno.getChildren().add(0,levelOne);
       levelUno.getChildren().add(human);
+      System.out.println(levelUno.getChildren());
       
       Scene level1 = new Scene(levelUno, W, H, Color.FORESTGREEN);
       
@@ -87,22 +87,22 @@ public class contrapLevelOne extends Application
                 switch (event.getCode()) 
                 {
                     case UP:    goUp = true;
-                    System.out.println("UP pressed");
+                    //System.out.println("UP pressed");
                     //System.out.println("X: " + human.getLocalToParentTransform().getTx() + "\tY: " + human.getLocalToParentTransform().getTy());
                     break;
                     
                     case DOWN:  goDown = true;
-                    System.out.println("DONW pressed");
+                    //System.out.println("DONW pressed");
                     //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
                     case LEFT:  goLeft  = true; 
-                    System.out.println("LEFT pressed");
+                    //System.out.println("LEFT pressed");
                     //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
                     case RIGHT: goRight  = true;
-                    System.out.println("RIGHT pressed");
+                    //System.out.println("RIGHT pressed");
                     //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
@@ -117,18 +117,17 @@ public class contrapLevelOne extends Application
                 switch (event.getCode()) 
                 {
                     case UP:    goUp = false;
-                    System.out.println("UP released");
-                     break;
+                    //System.out.println("UP released");
+                    break;
                     case DOWN:  goDown = false;
-                    System.out.println("DOWN released");
-                     break;
+                    //System.out.println("DOWN released");
+                    break;
                     case LEFT:  goLeft  = false;
-                    System.out.println("LEFT released");
-                     break;
+                    //System.out.println("LEFT released");
+                    break;
                     case RIGHT: goRight  = false;
-                    System.out.println("RIGHT released");
-                     break;
-
+                    //System.out.println("RIGHT released");
+                    break;
                 }
             }
         });
@@ -151,27 +150,37 @@ public class contrapLevelOne extends Application
                 if (goRight)  dx += 1;
 
                 moveHeroBy(dx, dy);
-                while((human.getLocalToParentTransform().getTx() < 26) || (human.getLocalToParentTransform().getTy() < 74) ||
-               (human.getLocalToParentTransform().getTx() > 617) || (human.getLocalToParentTransform().getTy() > 566))
-                {
-                  timer.stop();
-                  //inBounds = false;
-                  //too far left [x < 26]
-                  if((human.getLocalToParentTransform().getTy() < 74) ||
+                //testing boundaries
+                /*if((human.getLocalToParentTransform().getTx() < 26) || (human.getLocalToParentTransform().getTy() < 74) ||
                   (human.getLocalToParentTransform().getTx() > 617) || (human.getLocalToParentTransform().getTy() > 566))
-                  {
-                     timer.start();
-                  }
+                {
                   
+                }*/
+                
+                //if too far left
+                if(human.getLocalToParentTransform().getTx() < 26)
+                {
+                  human.relocate(26.0, (human.getLocalToParentTransform().getTy()));
+                }
+                //if too far up
+                if(human.getLocalToParentTransform().getTy() < 74)
+                {
+                  human.relocate((human.getLocalToParentTransform().getTx()), 74.0);
+                }
+                //too far right
+                if(human.getLocalToParentTransform().getTx() > 617)
+                {
+                  human.relocate(617.0, (human.getLocalToParentTransform().getTy()));
+                }
+                //too far down
+                if(human.getLocalToParentTransform().getTy() > 566)
+                {
+                  human.relocate((human.getLocalToParentTransform().getTx()), 566.0);
                 }
                
             }
         };
         timer.start();
-        
-      //bounds on character
-      
-      
        
    }
    
