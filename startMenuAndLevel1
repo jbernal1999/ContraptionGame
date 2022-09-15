@@ -23,15 +23,20 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
+import java.io.IOException;
 
 public class startMenu extends Application
 {
-    public static void main(String[] args)
+    public static void main(String[] args)throws IOException, InterruptedException
    {
+
       launch(args);
+      
+     
+
    }
    
-   private static final double W = 650, H = 650;
+   private static final double W = 600, H = 600;
    boolean goUp, goDown, goRight, goLeft, inBounds;
    public Rectangle human;
    public AnimationTimer timer;
@@ -107,8 +112,11 @@ public class startMenu extends Application
       inBounds = true;
  
       //level 1 layout - create new pane
-      TilePane levelOne = new TilePane();
+      TilePane levelOne = new TilePane(Orientation.VERTICAL);
       levelOne.setPrefSize(W, H);
+      //insets(top, right, bottom, left)
+      levelOne.setPadding(new Insets(110,0,0,110));
+      //levelOne.setPrefSize(W, H);
       
       
       
@@ -132,16 +140,16 @@ public class startMenu extends Application
          for(int j = 0; j < columns; j++)
          {
             tiles[i][j] = new Rectangle();
-            tiles[i][j].setWidth(100);
-            tiles[i][j].setHeight(100);
+            tiles[i][j].setWidth(75);
+            tiles[i][j].setHeight(75);
             tiles[i][j].setFill(Color.RED);
             tiles[i][j].setStroke(Color.BLACK);
+            levelOne.getChildren().add(tiles[i][j]);
             
-            levelOne.getChildren().add(0,tiles[i][j]);
+            //System.out.println(tiles[i][j]);
          }
       }
-      
-      levelOne.setAlignment(Pos.CENTER);
+      levelOne.setTileAlignment(Pos.CENTER);
       
       Group levelUno = new Group();
       levelUno.getChildren().add(0,levelOne);
@@ -233,26 +241,25 @@ public class startMenu extends Application
                 {
                   
                 }*/
-                
-                //if too far left
-                if(human.getLocalToParentTransform().getTx() < 26)
+                //if too far left                
+                if(human.getLocalToParentTransform().getTx() < 111)
                 {
-                  human.relocate(26.0, (human.getLocalToParentTransform().getTy()));
+                  human.relocate(111.0, (human.getLocalToParentTransform().getTy()));
                 }
                 //if too far up
-                if(human.getLocalToParentTransform().getTy() < 74)
+                if(human.getLocalToParentTransform().getTy() < 110)
                 {
-                  human.relocate((human.getLocalToParentTransform().getTx()), 74.0);
+                  human.relocate((human.getLocalToParentTransform().getTx()), 110.0);
                 }
                 //too far right
-                if(human.getLocalToParentTransform().getTx() > 617)
+                if(human.getLocalToParentTransform().getTx() > 402)
                 {
-                  human.relocate(617.0, (human.getLocalToParentTransform().getTy()));
+                  human.relocate(402.0, (human.getLocalToParentTransform().getTy()));
                 }
                 //too far down
-                if(human.getLocalToParentTransform().getTy() > 566)
+                if(human.getLocalToParentTransform().getTy() > 554)
                 {
-                  human.relocate((human.getLocalToParentTransform().getTx()), 566.0);
+                  human.relocate((human.getLocalToParentTransform().getTx()), 554.0);
                 }
                
             }
