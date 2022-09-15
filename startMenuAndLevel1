@@ -83,8 +83,8 @@ public class startMenu extends Application
    public AnimationTimer timer;
    
    //set here so pane doesn't change
-   int paneWidth = 650;
-   int paneHeight = 650;
+   int paneWidth = 600;
+   int paneHeight = 600;
    
    //change stage name so there's no confusion
    Stage mainWindow;
@@ -153,7 +153,7 @@ public class startMenu extends Application
       inBounds = true;
  
       //level 1 layout - create new pane
-      TilePane levelOne = new TilePane(Orientation.VERTICAL);
+      StackPane levelOne = new StackPane();
       levelOne.setPrefSize(W, H);
       //insets(top, right, bottom, left)
       levelOne.setPadding(new Insets(110,0,0,110));
@@ -174,23 +174,49 @@ public class startMenu extends Application
       Rectangle[][] tiles;
       int rows = 6;
       int columns = 5;
-      tiles = new Rectangle[rows][columns];
+      int locationX = -205;
+      int locationY = -285;
+      int count = 1;      
+      Rectangle player;
       //initalize tileboard
-      for(int i = 0; i < rows; i++)
-      {
-         for(int j = 0; j < columns; j++)
+      for(int i = 0; i < 30; i++)
+      {     
+      player = new Rectangle();
+      
+      if(i % 5 == 0)
          {
-            tiles[i][j] = new Rectangle();
-            tiles[i][j].setWidth(75);
-            tiles[i][j].setHeight(75);
-            tiles[i][j].setFill(Color.RED);
-            tiles[i][j].setStroke(Color.BLACK);
-            levelOne.getChildren().add(tiles[i][j]);
+            locationX = -205;
+            locationY = locationY + 75;
+            player.setTranslateY(locationY);
+         }    
             
-            //System.out.println(tiles[i][j]);
-         }
+            player.setWidth(75);
+            player.setHeight(75);
+            player.setFill(Color.RED);
+            player.setStroke(Color.BLACK);
+            player.setTranslateX(locationX);
+            player.setTranslateY(locationY);
+            //locationY = locationY-75;
+            locationX = locationX+75;
+            
+            levelOne.getChildren().add(player);
+            //System.out.println(tiles[i][j]);  
+            
+           
+
+            
       }
-      levelOne.setTileAlignment(Pos.CENTER);
+      
+      int jukeBoxLocationX = 0;
+      int jukeBoxLocationY = 100;
+      Rectangle jukebox = new Rectangle(50,50);
+      jukebox.setTranslateX(jukeBoxLocationX);
+      jukebox.setTranslateY(jukeBoxLocationY);
+      jukebox.setFill(Color.WHITE);
+      levelOne.getChildren().add(jukebox);
+
+
+      levelOne.setAlignment(Pos.CENTER);
       
       Group levelUno = new Group();
       levelUno.getChildren().add(0,levelOne);
@@ -215,22 +241,22 @@ public class startMenu extends Application
                 {
                     case UP:    goUp = true;
                     //System.out.println("UP pressed");
-                    //System.out.println("X: " + human.getLocalToParentTransform().getTx() + "\tY: " + human.getLocalToParentTransform().getTy());
+                    System.out.println("X: " + human.getLocalToParentTransform().getTx() + "\tY: " + human.getLocalToParentTransform().getTy());
                     break;
                     
                     case DOWN:  goDown = true;
                     //System.out.println("DONW pressed");
-                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
                     case LEFT:  goLeft  = true; 
                     //System.out.println("LEFT pressed");
-                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
                     case RIGHT: goRight  = true;
                     //System.out.println("RIGHT pressed");
-                    //System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
                     break;
                     
                 }
@@ -270,10 +296,10 @@ public class startMenu extends Application
             {
                 int dx = 0, dy = 0;
 
-                if (goUp) dy -= 1;
-                if (goDown) dy += 1;
-                if (goLeft)  dx -= 1;
-                if (goRight)  dx += 1;
+                if (goUp) dy -= 3;
+                if (goDown) dy += 3;
+                if (goLeft)  dx -= 3;
+                if (goRight)  dx += 3;
 
                 moveHeroBy(dx, dy);
                 //testing boundaries
@@ -298,9 +324,9 @@ public class startMenu extends Application
                   human.relocate(402.0, (human.getLocalToParentTransform().getTy()));
                 }
                 //too far down
-                if(human.getLocalToParentTransform().getTy() > 554)
+                if(human.getLocalToParentTransform().getTy() > 547)
                 {
-                  human.relocate((human.getLocalToParentTransform().getTx()), 554.0);
+                  human.relocate((human.getLocalToParentTransform().getTx()), 547.0);
                 }
                
             }
