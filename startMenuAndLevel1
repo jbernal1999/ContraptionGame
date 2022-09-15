@@ -24,15 +24,56 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import java.io.IOException;
+import java.io.IOException;
+import java.util.Scanner;
+import java.net.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.io.*;
+import java.util.*;
+import java.lang.String;
+import java.lang.Thread;
 
 public class startMenu extends Application
 {
     public static void main(String[] args)throws IOException, InterruptedException
    {
+      String newFile; 
+      ArrayList<String> levels = new ArrayList<String>();
+      levels.add("level1.txt");
+      levels.add("level2.txt");
+      levels.add("level3.txt");
+      levels.add("level4.txt");
+      
+      FileWriter file = null;
+      
+      /*try{
+         for(int i = 0; i < levels.size(); i++)
+         {
+            newFile = levels.get(i);
+            Scanner scan = new Scanner(new File(newFile)); //read from file
+            
+            while(scan.hasNextLine())
+            {
+               
+            }
+
+         }           
+        
+      }
+   
+      }catch(Exception e)
+      {
+         System.out.println("File does not exist!");
+      }*/
 
       launch(args);
       
-     
+      
 
    }
    
