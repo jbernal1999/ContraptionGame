@@ -39,38 +39,70 @@ import java.lang.String;
 import java.lang.Thread;
 
 public class startMenu extends Application
-{
+{   
+   
+   Scanner scan = new Scanner(System.in);
+  public static ArrayList<ArrayList<Integer>> gameBoard = new ArrayList<ArrayList<Integer>>();
+  public static int locationX = 0;
+  public static int locationY = 0;
+  public static String levelChoice;
+  public static int paneWidth;
+  public static int paneHeight; 
+  public static int insetTop; 
+  public static int insetRight;
+  public static int insetBottom;
+  public static int insetLeft;
+  public static int rows; 
+  public static int columns; 
+  public static int tileWidth;
+  public static int tileHeight;
+  public static int block;
+
     public static void main(String[] args)throws IOException, InterruptedException
    {
-      String newFile; 
+      String newFile;
       ArrayList<String> levels = new ArrayList<String>();
       levels.add("level1.txt");
       levels.add("level2.txt");
       levels.add("level3.txt");
       levels.add("level4.txt");
-      
-      FileWriter file = null;
-      
-      /*try{
-         for(int i = 0; i < levels.size(); i++)
-         {
-            newFile = levels.get(i);
-            Scanner scan = new Scanner(new File(newFile)); //read from file
-            
-            while(scan.hasNextLine())
-            {
-               
-            }
 
-         }           
-        
-      }
-   
-      }catch(Exception e)
+      try{
+            newFile = "level1.txt";
+            Scanner scan = new Scanner(new File(newFile)); //read from file
+           
+               paneWidth = scan.nextInt();
+               paneHeight = scan.nextInt();
+               insetTop = scan.nextInt();
+               insetRight = scan.nextInt();
+               insetBottom = scan.nextInt();
+               insetLeft = scan.nextInt();
+               rows = scan.nextInt();
+               columns = scan.nextInt();
+               tileWidth = scan.nextInt();
+               tileHeight = scan.nextInt();
+               
+               for(int i=0; i<rows; i++)
+               {
+                 ArrayList<Integer> inside = new ArrayList<Integer>();
+                 gameBoard.add(inside);
+               }
+               
+               //for loop to add the ints to the inner ArrayLists
+               for(int i=0; i<rows; i++)
+               {
+                 for(int j=0; j<columns; j++)
+                 {
+                   gameBoard.get(i).add(scan.nextInt());
+                 }
+               }             
+
+      }catch(FileNotFoundException fnfe) //catch if the file does not exist
       {
          System.out.println("File does not exist!");
-      }*/
-
+      }
+      
+      
       launch(args);
       
       
@@ -82,9 +114,6 @@ public class startMenu extends Application
    public Rectangle human;
    public AnimationTimer timer;
    
-   //set here so pane doesn't change
-   int paneWidth = 600;
-   int paneHeight = 600;
    
    //change stage name so there's no confusion
    Stage mainWindow;
@@ -92,7 +121,7 @@ public class startMenu extends Application
    Scene level1, level2, level3, level4;
    
    public void start(Stage stage)
-   {
+   {  
       //change stage name
       mainWindow = stage; 
        
@@ -159,27 +188,54 @@ public class startMenu extends Application
       levelOne.setPadding(new Insets(110,0,0,110));
       //levelOne.setPrefSize(W, H);
       
-      
-      
-      //level 1 layout - create new pane
-      //TilePane levelOne = new TilePane(Orientation.VERTICAL);
-      //levelOne.setPrefSize(paneWidth, paneHeight);
-      //levelOne.setPadding(new Insets(20,20,20,20));
-      
-      //borderpane
-      //BorderPane tileFloor = new Borderpane();
-   
-      
       //declare tileboard
-      Rectangle[][] tiles;
-      int rows = 6;
-      int columns = 5;
+      //Rectangle[][] tiles;
+      //int rows = 6;
+      //int columns = 5;
       int locationX = -205;
       int locationY = -285;
       int count = 1;      
-      Rectangle player;
+      Rectangle tiles;
       //initalize tileboard
-      for(int i = 0; i < 30; i++)
+      
+     
+      for(int i=0; i<rows; i++)
+    {
+      for(int j=0; j<columns; j++)
+      {
+        tiles = new Rectangle();
+        tiles.setWidth(tileWidth);
+        tiles.setHeight(tileHeight);
+          
+        if(gameBoard.get(i).get(j) == 0)
+        {
+            tiles.setFill(Color.BLACK);
+            tiles.setStroke(Color.BLACK);
+            tiles.setTranslateX(locationX);
+            tiles.setTranslateY(locationY);
+            locationX = locationX+75;           
+            levelOne.getChildren().add(tiles);
+        }
+             
+        if(gameBoard.get(i).get(j) == 1)
+        {
+            tiles.setFill(Color.WHITE);
+            tiles.setStroke(Color.WHITE);
+            tiles.setTranslateX(locationX);
+            tiles.setTranslateY(locationY);
+            locationX = locationX+75;           
+            levelOne.getChildren().add(tiles);
+        }
+      } 
+      locationX = -205;
+      locationY = locationY + 75;
+    }
+
+      
+      
+      
+      
+      /*for(int i = 0; i < 30; i++)
       {     
       player = new Rectangle();
       
@@ -207,13 +263,13 @@ public class startMenu extends Application
             
       }
       
-      int jukeBoxLocationX = 0;
-      int jukeBoxLocationY = 100;
-      Rectangle jukebox = new Rectangle(50,50);
+      int jukeBoxLocationX = 31;
+      int jukeBoxLocationY = -25;
+      Rectangle jukebox = new Rectangle(50,90);
       jukebox.setTranslateX(jukeBoxLocationX);
       jukebox.setTranslateY(jukeBoxLocationY);
-      jukebox.setFill(Color.WHITE);
-      levelOne.getChildren().add(jukebox);
+      jukebox.setFill(Color.TURQUOISE);
+      levelOne.getChildren().add(jukebox);*/
 
 
       levelOne.setAlignment(Pos.CENTER);
@@ -221,7 +277,7 @@ public class startMenu extends Application
       Group levelUno = new Group();
       levelUno.getChildren().add(0,levelOne);
       levelUno.getChildren().add(human);
-      System.out.println(levelUno.getChildren());
+      //System.out.println(levelUno.getChildren());
       
       //create new rectangle for raised area
       //Rectangle shelf = new Rectangle(125,600);
@@ -231,7 +287,7 @@ public class startMenu extends Application
       
       //level1 = new Scene(levelOne, paneWidth, paneHeight);
       
-      level1 = new Scene(levelUno, W, H, Color.FORESTGREEN);
+      level1 = new Scene(levelUno, W, H, Color.BLUE);
       
       level1.setOnKeyPressed(new EventHandler<KeyEvent>() 
       {
@@ -370,5 +426,9 @@ public class startMenu extends Application
             human.relocate(x - cx, y - cy);
         }
     }
+    
+
+
+    
 
 }
