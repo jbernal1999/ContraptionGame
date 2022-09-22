@@ -37,6 +37,11 @@ import java.io.*;
 import java.util.*;
 import java.lang.String;
 import java.lang.Thread;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.SeparatorMenuItem;
 
 public class startMenu extends Application
 {   
@@ -289,6 +294,40 @@ public class startMenu extends Application
       
       level1 = new Scene(levelUno, W, H, Color.BLUE);
       
+      //Creating the drop down menu
+      ContextMenu contextMenu = new ContextMenu();
+      MenuItem menuItemAbout = new MenuItem("About...");
+      
+      //Creating a menu inside the menu
+      Menu Restart = new Menu("Restart...");
+      
+      //Creating menu items for restart sub menu
+      MenuItem Area = new MenuItem("Area");
+      MenuItem Level = new MenuItem("Level");
+      
+      //Adding sub items to restart
+      Restart.getItems().addAll(Area, Level);
+      
+      //Adding the rest of the items to our context menu
+      MenuItem menuItemSave = new MenuItem("Save Game");
+      MenuItem menuItemLoad = new MenuItem("Load Game");
+      MenuItem menuItemQuit = new MenuItem("Quit");
+      
+      //Creating a separator
+      SeparatorMenuItem sep = new SeparatorMenuItem();
+      contextMenu.getItems().addAll(menuItemAbout, Restart, menuItemSave, menuItemLoad, sep, menuItemQuit);      
+
+      //Drop down menu prints statments to make sure we reach each button... 
+      //this is where we'll add code for each button
+         
+         menuItemAbout.setOnAction(e -> System.out.println("About"));
+         //Restart.setOnAction(e -> System.out.println("Restart"));
+         Area.setOnAction(e -> System.out.println("Area"));
+         Level.setOnAction(e -> System.out.println("Level"));
+         menuItemSave.setOnAction(e -> System.out.println("Save Game"));
+         menuItemLoad.setOnAction(e -> System.out.println("Load Game"));
+         menuItemQuit.setOnAction(e -> System.exit(0));    
+      
       level1.setOnKeyPressed(new EventHandler<KeyEvent>() 
       {
             public void handle(KeyEvent event) 
@@ -313,6 +352,14 @@ public class startMenu extends Application
                     case RIGHT: goRight  = true;
                     //System.out.println("RIGHT pressed");
                     System.out.println("X: " + human.getLocalToSceneTransform().getTx() + "\tY: " + human.getLocalToSceneTransform().getTy());
+                    break;
+                    
+                    case ESCAPE: 
+                    //making sure we made it here                   
+                    System.out.println("ESC pressed");
+                    
+                    //Prints out the context menu
+                    contextMenu.show(levelOne, 28, 76);                    
                     break;
                     
                 }
