@@ -1,0 +1,220 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import javafx.scene.input.KeyCode;
+
+import javafx.application.Application; 
+import javafx.collections.ObservableList; 
+import javafx.geometry.Orientation; 
+import javafx.geometry.Pos; 
+import javafx.scene.Scene; 
+import javafx.scene.control.*;
+import javafx.scene.canvas.*;
+import javafx.scene.paint.*;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.*; 
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import java.awt.Component;
+import javafx.geometry.*;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.*;
+import javafx.scene.image.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.scene.text.*;
+import java.io.IOException;
+import java.io.IOException;
+import java.util.Scanner;
+import java.net.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.io.*;
+import java.util.*;
+import java.lang.String;
+import java.lang.Thread;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
+
+
+public class Main extends Application
+{
+   private HashMap<KeyCode, Boolean> keys = new HashMap<KeyCode, Boolean>();
+   
+   private ArrayList<Node> platforms = new ArrayList<Node>();
+   
+   private Pane appRoot = new Pane();
+   private Pane gameRoot = new Pane();
+   private Pane uiRoot = new Pane();
+   
+   private Node player;
+   
+   private int levelWidth; 
+   
+   private void initContent()
+   {
+      Rectangle tile = new Rectangle(300, 450);
+      
+      levelWidth = LevelData.level1[0].length()*75;
+      
+      for(int i=0; i<LevelData.level1.length; i++)
+      {
+         String line = LevelData.level1[i];
+         for(int j=0; j<line.length(); j++)
+         {
+            switch(line.charAt(j))
+            {
+               case '0':
+                  break;
+               case '1':
+                  Node ground = createEntity(j*75, i*75, 75, 75, Color.WHITE);
+                  platforms.add(ground);
+                  break;
+               case '2':
+                  Node wall = createEntity(j*75, i*75, 75, 75, Color.BROWN);
+                  platforms.add(wall);
+                  break;
+            }
+         }
+      }
+      
+      player = createEntity(0, 200, 40, 40, Color.BLUE);
+      appRoot.getChildren().addAll(tile, gameRoot, uiRoot);
+   }
+   
+   private void update()
+   {
+      if(isPressed(KeyCode.UP))
+      {
+         movePlayerY(1);
+      }
+      if(isPressed(KeyCode.LEFT))
+      {
+         movePlayerX(1);
+      }
+      if(isPressed(KeyCode.RIGHT))
+      {
+         movePlayerX(-1);
+      }
+      if(isPressed(KeyCode.DOWN))
+      {
+         movePlayerY(-1);
+      }
+   
+   }
+   
+   private void movePlayerX(int value)
+   {
+      boolean movingRight = value > 0;
+      
+      for(int i=0; i<Math.abs(value); i++)
+      {
+         for(Node platform : platforms)
+         {
+            if(player.getBoundsInParent().intersects(platform.getBoundsInParent()))
+            {
+               if(movingRight)
+               {
+                  if(player.getTranslateX() + 40 == platform.getTranslateX())
+                  {
+                     return;
+                  }   
+               }
+               else
+               {
+                  if(player.getTranslateX() == platform.getTranslateX() + 60)
+                  {
+                     return;
+                  }
+               }
+            }
+         }
+         player.setTranslateX(player.getTranslateX() + (movingRight ? 1 : -1));
+      }
+   }
+   
+   private void movePlayerY(int value)
+   {
+      boolean movingDown = value > 0;
+      
+      for(int i=0; i<Math.abs(value); i++)
+      {
+         for(Node wall : platforms)
+         {
+            if(player.getBoundsInParent().intersects(wall.getBoundsInParent()))
+            {
+               if(movingDown)
+               {
+                  if(player.getTranslateY() + 40 == wall.getTranslateY())
+                  {
+                     player.setTranslateY(player.getTranslateY() - 1);
+                     return;
+                  }   
+               }
+               else
+               {
+                  if(player.getTranslateY() == wall.getTranslateY() + 60)
+                  {
+                     return;
+                  }
+               }
+            }
+         }
+         player.setTranslateY(player.getTranslateY() + (movingDown ? 1 : -1));
+      }
+   
+   }
+   
+   private Node createEntity(int x, int y, int h, int w, Color color)
+   {
+      Rectangle entity = new Rectangle(w, h);
+      entity.setTranslateX(x);
+      entity.setTranslateY(y);
+      entity.setFill(color);
+      
+      gameRoot.getChildren().add(entity);
+      return entity; 
+   }
+   
+   private boolean isPressed(KeyCode key)
+   {
+      return keys.getOrDefault(key, false);
+   }
+   
+   public void start(Stage primaryStage) throws Exception
+   {
+      initContent();
+      
+      Scene scene = new Scene(appRoot);
+      primaryStage.setTitle("Level1");
+      primaryStage.setScene(scene);
+      primaryStage.show();
+      
+      AnimationTimer timer = new AnimationTimer()
+      {
+         public void handle(long now)
+         {
+            update();
+         }
+      };
+      timer.start();
+   }
+   
+   public static void main(String[] args)
+   {
+      launch(args);
+   }
+}
+
